@@ -1,0 +1,12 @@
+@keyframes appbar-button-hover {
+  from {
+    width: 0;
+  }
+  to {
+    width: 90%;
+  }
+}
+
+:root {
+  height: 100vh;
+}
