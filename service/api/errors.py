@@ -64,7 +64,7 @@ def get_errors():
         ]
 
         if error is None:
-            return filtered_errors[['exam_id', 'marked_tgt_seg', 'simplified_src_text', 'name', 'severity', 'ata_points', 'ata_score']].to_json()
+            return filtered_errors[['exam_id', 'marked_tgt_seg', 'simplified_src_text', 'name', 'severity', 'ata_points', 'ata_score', 'src_lang']].to_json()
     except Exception as e:
         error = e
         pass

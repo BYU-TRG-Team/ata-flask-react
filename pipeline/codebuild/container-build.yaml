@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  BuildContainer:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Cache:
+        Type: NO_CACHE
+      Description: ATA DB API Container Building
+      Environment:
+        ComputeType: BUILD_LAMBDA1_1GB
+        Image: aws/codebuild/amazonlinux-x86_64-lambda-standard:python3.11
+        Type: LINUX_LAMBDA_CONTAINER
+      QueuedTimeoutInMinutes: 10
+      ServiceRole: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
+      Source:
+        BuildSpec: pipeline/buildspecs/build-flask-container.yaml
+        GitCloneDepth: 1
+        GitSubmodules:
+          FetchSubmodules: true
+        Type: CODEPIPELINE

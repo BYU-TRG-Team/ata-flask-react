@@ -1,0 +1,21 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions: 
+      python: 3.11
+    commands:
+      - echo "Install phase entered..."
+  pre_build:
+    commands:
+      - echo "Pre-build phase entered..."
+      - pip install -r service/requirements.txt -t service
+  build:
+    commands:
+      - echo "Build phase entered..."
+  post_build:
+    commands:
+      - echo "Post-build phase entered..."
+artifacts:
+  base-directory: dist/ata_flask_react
+  files:
+    - '**/*'

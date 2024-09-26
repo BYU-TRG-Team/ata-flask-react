@@ -4,7 +4,8 @@ import { useData, useDrawer } from "../store";
 import { Autocomplete, Box, Button, Drawer, IconButton, Slider, TextField, Typography } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid'
 import { ChevronLeft } from '@mui/icons-material'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Plot from 'react-plotly.js'
 
 interface IOptions {
     pointsLost?: number|number[],
@@ -21,6 +22,7 @@ export default function Errors() {
     const { open, setOpen } = useDrawer()
     const { counts, data, filters, fetchData } = useData()
     const [ dataRows, setDataRows ] = useState([])
+    const [ graphData, setGraphData ] = useState([])
     
     const defaultOptions: IOptions = {
         pointsLost: [0, 10000],
@@ -52,46 +54,71 @@ export default function Errors() {
                 })
                 return prev
             }, {})
-        console.log(groupedOnRow)
         const rows = Object.keys(groupedOnRow).map((key) => {
             return {
                 id: key,
                 ...groupedOnRow[key]
             }
         })
-        console.log(rows)
         return rows
     }
 
+    const convertToGraph = () => {
+        const nameCountBySrcLang = Object.keys(data?.['name'] ?? {}).reduce((prev, key, i) => {
+            const name = data['name'][key]
+            const lang = data['src_lang'][i]
+            if (prev[lang]['y']) prev[lang]['y']++
+            else {
+                prev[lang]['x'] = name
+                prev[lang]['y'] = 1
+            }
+            return prev
+        }, {})
+
+        console.log(nameCountBySrcLang)
+        const _graphData = Object.keys(nameCountBySrcLang).map(key => ({
+            ...data[key],
+            type: 'histogram'
+        }))
+        console.log(_graphData)
+        setGraphData(_graphData)
+    }
+
     useEffect(() => {
-        if (data) setDataRows(convertToRows())
+        if (data) {
+            setDataRows(convertToRows())
+            setGraphData(convertToGraph())
+        }
     }, [data])
     
     const DrawerList = (
         <Box sx={{ width: '30vh', p: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button 
-                onClick={() => fetchData({
-                    ata_points_range: typeof options.pointsLost === 'number' ? {
-                        min: options.pointsLost,
-                        max: options.pointsLost
-                    } : {
-                        min: options.pointsLost![0],
-                        max: options.pointsLost![1]
-                    },
-                    ata_score_range: typeof options.totalScore === 'number' ? {
-                        min: options.totalScore,
-                        max: options.totalScore
-                    } : {
-                        min: options.totalScore![0],
-                        max: options.totalScore![1]
-                    },
-                    passage_letters: options.passageLetters ?? [],
-                    src_langs: options.sourceLangs ?? [],
-                    tgt_langs: options.targetLangs ?? [],
-                    error_types: options.errorTypes ?? [],
-                    severities: options.severityLevels ?? [],
-                    ata_codes: options.ataCodes ?? []
-                })}
+                onClick={() => {
+                    fetchData({
+                        ata_points_range: typeof options.pointsLost === 'number' ? {
+                            min: options.pointsLost,
+                            max: options.pointsLost
+                        } : {
+                            min: options.pointsLost![0],
+                            max: options.pointsLost![1]
+                        },
+                        ata_score_range: typeof options.totalScore === 'number' ? {
+                            min: options.totalScore,
+                            max: options.totalScore
+                        } : {
+                            min: options.totalScore![0],
+                            max: options.totalScore![1]
+                        },
+                        passage_letters: options.passageLetters ?? [],
+                        src_langs: options.sourceLangs ?? [],
+                        tgt_langs: options.targetLangs ?? [],
+                        error_types: options.errorTypes ?? [],
+                        severities: options.severityLevels ?? [],
+                        ata_codes: options.ataCodes ?? []
+                    })
+                    setOpen(false)
+                }}
                 sx={{ border: '1px solid black' }}>Submit Query</Button>
             <Typography noWrap={false}>Points Lost on Error</Typography>
             <Slider 
@@ -250,7 +277,17 @@ export default function Errors() {
                 >
 
                 </DataGrid>
+
                 }
+
+                <Plot
+                    data={graphData}
+                    layout={{
+                        title:'Error Types by Source Language',
+                        xaxis: { title: 'Source of Language'},
+                        yaxis: { title: 'Count of Errors' },
+                        barmode: 'group'
+                    }} />
             </Container>
 
             <Drawer 
