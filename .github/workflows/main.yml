@@ -20,7 +20,7 @@ jobs:
           # The name of the CloudFormation stack
           name: ata-db-api-deploy
           # The path or URL to the CloudFormation template
-          template: pipeline/ata_flask_react.yml
+          template: pipeline/ata_flask_react.yaml
           # Key-value pairs to associate with this stack. This input should be JSON-formatted, for example [ { "Key": "string", "Value": "string" } ]
                 
   
