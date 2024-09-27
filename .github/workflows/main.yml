@@ -1,0 +1,26 @@
+name: ATA DB API CloudFormation Deployment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          
+      - name: AWS CloudFormation "Deploy CloudFormation Stack" Action for GitHub Actions
+        # You may pin to the exact commit or the version.
+        # uses: aws-actions/aws-cloudformation-github-deploy@e675be17f6d393aacca6f94986bc6560de5aedd0
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.2.0
+        with:
+          # The name of the CloudFormation stack
+          name: ata-db-api-deploy
+          # The path or URL to the CloudFormation template
+          template: pipeline/ata_flask_react.yml
+          # Key-value pairs to associate with this stack. This input should be JSON-formatted, for example [ { "Key": "string", "Value": "string" } ]
+                
+  
