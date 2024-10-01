@@ -56,7 +56,8 @@ Resources:
           Image: !Ref ECRRepository
           Name: ata-db-api
           PortMappings:
-            - 5000
+            - ContainerPort: 5000
+            - ContainerPort: 5432
       Cpu: 256
       Memory: 512
       ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
