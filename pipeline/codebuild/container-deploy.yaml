@@ -6,8 +6,8 @@ Resources:
     Properties:
       EmptyOnDelete: true
       RepositoryName: ata-db/api
-      Tags:
-        - Name: project
+      Tag:
+        - Key: project
           Value: ata-db
 
   BuildContainer:
@@ -35,16 +35,16 @@ Resources:
         GitSubmodulesConfig:
           FetchSubmodules: true
         Type: CODEPIPELINE
-      Tags:
-        - Name: project
+      Tag:
+        - Key: project
           Value: ata-db
 
   CreateCluster:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: ata-db-api
-      Tags:
-        - Name: project
+      Tag:
+        - Key: project
           Value: ata-db
 
   CreateTask:
@@ -63,6 +63,6 @@ Resources:
       Memory: 512
       ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
       NetworkMode: awsvpc
-      Tags:
+      Tag:
         - Name: project
           Value: ata-db
