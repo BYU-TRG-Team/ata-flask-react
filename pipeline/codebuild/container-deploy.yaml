@@ -6,7 +6,7 @@ Resources:
     Properties:
       EmptyOnDelete: true
       RepositoryName: ata-db/api
-      Tag:
+      Tags:
         - Key: project
           Value: ata-db
 
@@ -35,7 +35,7 @@ Resources:
         GitSubmodulesConfig:
           FetchSubmodules: true
         Type: CODEPIPELINE
-      Tag:
+      Tags:
         - Key: project
           Value: ata-db
 
@@ -43,7 +43,7 @@ Resources:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: ata-db-api
-      Tag:
+      Tags:
         - Key: project
           Value: ata-db
 
@@ -63,6 +63,6 @@ Resources:
       Memory: 512
       ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
       NetworkMode: awsvpc
-      Tag:
+      Tags:
         - Key: project
           Value: ata-db
