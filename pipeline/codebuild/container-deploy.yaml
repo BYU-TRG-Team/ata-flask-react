@@ -64,5 +64,5 @@ Resources:
       ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
       NetworkMode: awsvpc
       Tag:
-        - Name: project
+        - Key: project
           Value: ata-db
