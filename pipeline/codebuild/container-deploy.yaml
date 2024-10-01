@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  ECRRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      EmptyOnDelete: true
+      RepositoryName: ata-db/api
+      Tags:
+        - Name: project
+          Value: ata-db
+
+  BuildContainer:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Cache:
+        Type: NO_CACHE
+      Description: ATA DB API Container Building
+      Environment:
+        ComputeType: BUILD_LAMBDA1_1GB
+        Image: aws/codebuild/amazonlinux-x86_64-lambda-standard:python3.11
+        Type: LINUX_LAMBDA_CONTAINER
+        EnvironmentVariables:
+          - Name: AWS_ACCOUNT_ID
+            Value: $Ref "AWS::AccountId"
+          - Name: AWS_ECR_REPOSITORY_URI
+            Value: !Sub ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}}:latest
+      QueuedTimeoutInMinutes: 10
+      ServiceRole: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
+      Source:
+        BuildSpec: pipeline/buildspecs/build-flask-container.yaml
+        GitCloneDepth: 1
+        GitSubmodulesConfig:
+          FetchSubmodules: true
+        Type: CODEPIPELINE
+      Tags:
+        - Name: project
+          Value: ata-db
+
+  CreateCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: ata-db-api
+      Tags:
+        - Name: project
+          Value: ata-db
+
+  CreateTask:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        Command: python -m flask
+        Environment:
+          - Name: FLASK_APP
+            Value: dist/ata_flask_react
+        Image: !Ref ECRRepository
+        Name: ata-db-api
+        PortMappings:
+          - 5000
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
+      NetworkMode: awsvpc
+      Tags:
+        - Name: project
+          Value: ata-db
