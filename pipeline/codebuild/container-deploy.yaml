@@ -27,7 +27,7 @@ Resources:
             Value: !Ref "AWS::AccountId"
           - Name: AWS_ECR_REPOSITORY_URI
             Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}}:latest
-      ServiceRole: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
+      ServiceRole: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
       Source:
         BuildSpec: pipeline/buildspecs/build-flask-container.yaml
         GitCloneDepth: 1
@@ -48,14 +48,14 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        Command: python -m flask
-        Environment:
-          - Name: FLASK_APP
-            Value: dist/ata_flask_react
-        Image: !Ref ECRRepository
-        Name: ata-db-api
-        PortMappings:
-          - 5000
+        - Command: python -m flask
+          Environment:
+            - Name: FLASK_APP
+              Value: dist/ata_flask_react
+          Image: !Ref ECRRepository
+          Name: ata-db-api
+          PortMappings:
+            - 5000
       Cpu: 256
       Memory: 512
       ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
