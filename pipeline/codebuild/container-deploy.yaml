@@ -24,7 +24,7 @@ Resources:
         Type: LINUX_LAMBDA_CONTAINER
         EnvironmentVariables:
           - Name: AWS_ACCOUNT_ID
-            Value: $Ref "AWS::AccountId"
+            Value: !Ref AWS::AccountId
           - Name: AWS_ECR_REPOSITORY_URI
             Value: !Sub ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}}:latest
       QueuedTimeoutInMinutes: 10
