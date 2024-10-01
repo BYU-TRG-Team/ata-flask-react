@@ -31,8 +31,6 @@ Resources:
       Source:
         BuildSpec: pipeline/buildspecs/build-flask-container.yaml
         GitCloneDepth: 1
-        GitSubmodulesConfig:
-          FetchSubmodules: true
         Type: CODEPIPELINE
       Tags:
         - Key: project

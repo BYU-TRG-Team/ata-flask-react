@@ -5,9 +5,13 @@ phases:
       python: 3.11
     commands:
       - echo "Install phase entered..."
+      - apt update -y
+      - apt install -y git
   pre_build:
     commands:
       - echo "Pre-build phase entered..."
+      - git submodule init
+      - git submodule update --recursive
       - pip install -r service/requirements.txt -t service
   build:
     commands:
