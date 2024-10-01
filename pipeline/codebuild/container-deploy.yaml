@@ -27,7 +27,6 @@ Resources:
             Value: !Ref "AWS::AccountId"
           - Name: AWS_ECR_REPOSITORY_URI
             Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}}:latest
-      QueuedTimeoutInMinutes: 10
       ServiceRole: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
       Source:
         BuildSpec: pipeline/buildspecs/build-flask-container.yaml
