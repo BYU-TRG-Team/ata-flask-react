@@ -39,7 +39,7 @@ Resources:
             Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}}:latest
       LogsConfig:
         CloudWatchLogs: 
-          - GroupName: !Ref CloudWatchLogGroup
+          - GroupName: ata_db_api_docker_image_logs
             Status: ENABLED
             StreamName: ata-db-api-
 
