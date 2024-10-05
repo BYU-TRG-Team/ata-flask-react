@@ -50,6 +50,16 @@ Resources:
             Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}}:latest
           - Name: ARTIFACT_FILE
             Value: !Ref ECRRepository
+          - Name: RDS_HOST
+            Value: {{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:host}}
+          - Name: DB_NAME
+            Value: {{resolve:secretsmanager:ata-db-name:SecretString:ata-db-name}}
+          - Name: DB_PORT
+            Value: {{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:port}}
+          - Name: DB_USERNAME
+            Value: {{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:username}}
+          - Name: DB_PASSWORD
+            Value: {{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:password}}
       LogsConfig:
         CloudWatchLogs: 
           GroupName: ata_db_api_docker_image_logs
@@ -138,7 +148,7 @@ Resources:
           Name: ata-db-api
           PortMappings:
             - ContainerPort: 5000
-            - ContainerPort: 5432
+            - ContainerPort: {{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:port}}
       Cpu: 256
       Memory: 512
       ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
