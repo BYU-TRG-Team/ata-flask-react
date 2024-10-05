@@ -17,7 +17,7 @@ Resources:
     Type: AWS::ECR::Repository
     Properties:
       EmptyOnDelete: true
-      RepositoryName: ata-db/api
+      RepositoryName: ata-db-api
       Tags:
         - Key: project
           Value: ata-db
@@ -47,7 +47,7 @@ Resources:
           - Name: AWS_ACCOUNT_ID
             Value: !Ref "AWS::AccountId"
           - Name: AWS_ECR_REPOSITORY_URI
-            Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/ata-db/api:latest
+            Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
           - Name: ARTIFACT_FILE
             Value: !Ref ECRRepository
           - Name: RDS_HOST
