@@ -88,18 +88,18 @@ Resources:
               - Name: SourceArtifact
               - Name: Build
           - Name: Docker
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: '1'
-                Provider: CodeBuild
-              Configuration:
-                ProjectName: !Ref BuildContainer
-              InputArtifacts:
-                - Name: SourceArtifact
-              OutputArtifacts:
-                - Name: BuildArtifact
-              RunOrder: 1
+            ActionTypeId:
+              Category: Build
+              Owner: AWS
+              Version: '1'
+              Provider: CodeBuild
+            Configuration:
+              ProjectName: !Ref BuildContainer
+            InputArtifacts:
+              - Name: SourceArtifact
+            OutputArtifacts:
+              - Name: BuildArtifact
+            RunOrder: 1
           - Name: Deploy
             ActionTypeId:
               Category: Deploy
