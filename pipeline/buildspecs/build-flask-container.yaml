@@ -5,8 +5,8 @@ phases:
       python: 3.9
     commands:
       - echo "Install phase entered..."
-      - apt update -y
-      - apt install -y git
+      - yum update -y
+      - yum install -y git
   pre_build:
     commands:
       - echo "Pre-build phase entered..."
