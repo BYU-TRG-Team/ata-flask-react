@@ -73,8 +73,9 @@ Resources:
         Type: S3
         Location: !Ref AtaDbDeployPipelineArtifactStore
       Stages:
-        Actions:
-          - Name: Source
+        - Name: Source
+          Actions:
+            Name: Source
             ActionTypeId:
               Category: Source
               Owner: AWS
@@ -87,19 +88,23 @@ Resources:
             OutputArtifacts:
               - Name: SourceArtifact
               - Name: Build
-          - Name: Docker
-            ActionTypeId:
-              Category: Build
-              Owner: AWS
-              Version: '1'
-              Provider: CodeBuild
-            Configuration:
-              ProjectName: !Ref BuildContainer
-            InputArtifacts:
-              - Name: SourceArtifact
-            OutputArtifacts:
-              - Name: BuildArtifact
-            RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: Docker
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: '1'
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref BuildContainer
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+              RunOrder: 1
+        - Name: Deploy
+          Actions:
           - Name: Deploy
             ActionTypeId:
               Category: Deploy
