@@ -39,9 +39,9 @@ Resources:
             Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}}:latest
       LogsConfig:
         CloudWatchLogs: 
-          - GroupName: ata_db_api_docker_image_logs
-            Status: ENABLED
-            StreamName: ata-db-api-
+          GroupName: ata_db_api_docker_image_logs
+          Status: ENABLED
+          StreamName: ata-db-api-
 
       ServiceRole: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
       Source:
