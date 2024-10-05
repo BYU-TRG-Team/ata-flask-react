@@ -87,8 +87,7 @@ Resources:
             OutputArtifacts:
               - Name: SourceArtifact
               - Name: Build
-          Actions:
-            - Name: Docker
+          - Name: Docker
               ActionTypeId:
                 Category: Build
                 Owner: AWS
