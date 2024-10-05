@@ -58,8 +58,7 @@ Resources:
 
       ServiceRole: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
       Source:
-        BuildSpec: ata-flask-react/pipeline/buildspecs/build-flask-container.yaml
-        GitCloneDepth: 1
+        BuildSpec: pipeline/buildspecs/build-flask-container.yaml
         Type: CODEPIPELINE
       Tags:
         - Key: project
