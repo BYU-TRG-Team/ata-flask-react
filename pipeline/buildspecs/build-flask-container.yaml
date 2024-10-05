@@ -17,6 +17,7 @@ phases:
       - echo "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
       - echo "DB_PORT='$DB_PORT'\n" >> config.py 
       - echo "DB_NAME='$DB_NAME'\n" >> config.py
+      - docker build -t $AWS_ECR_REPOSITORY_URI .
   post_build:
     commands:
       - echo "Post-build phase entered..."
