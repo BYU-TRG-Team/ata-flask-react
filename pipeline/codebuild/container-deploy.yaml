@@ -75,19 +75,19 @@ Resources:
       Stages:
         - Name: Source
           Actions:
-            Name: Source
-            ActionTypeId:
-              Category: Source
-              Owner: AWS
-              Provider: CodeStarSourceConnection
-              Version: '1'
-            Configuration:
-              ConnectionArn: arn:aws:codeconnections:us-east-1:767397767501:connection/515a1f58-898b-4cd6-95de-b23d42946107
-              FullRepositoryId: BYU-TRG-Team/ata-infrastructure-pipeline
-              BranchName: main
-            OutputArtifacts:
-              - Name: SourceArtifact
-              - Name: Build
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: CodeStarSourceConnection
+                Version: '1'
+              Configuration:
+                ConnectionArn: arn:aws:codeconnections:us-east-1:767397767501:connection/515a1f58-898b-4cd6-95de-b23d42946107
+                FullRepositoryId: BYU-TRG-Team/ata-infrastructure-pipeline
+                BranchName: main
+              OutputArtifacts:
+                - Name: SourceArtifact
+                - Name: Build
         - Name: Build
           Actions:
             - Name: Docker
@@ -105,17 +105,17 @@ Resources:
               RunOrder: 1
         - Name: Deploy
           Actions:
-          - Name: Deploy
-            ActionTypeId:
-              Category: Deploy
-              Owner: AWS
-              Provider: CloudFormation
-              Version: '1'
-            Configuration:
-              ActionMode: CREATE_UPDATE
-              StackName: ata-db-codebuild
-              RoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
-              TemplatePath: SourceArtifact::cloudformation/codebuild/
+            - Name: Deploy
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                ActionMode: CREATE_UPDATE
+                StackName: ata-db-codebuild
+                RoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
+                TemplatePath: SourceArtifact::cloudformation/codebuild/
                     
 
   CreateCluster:
