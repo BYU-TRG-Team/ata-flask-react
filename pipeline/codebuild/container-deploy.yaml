@@ -71,7 +71,7 @@ Resources:
       RoleARN: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
       ArtifactStore:
         Type: S3
-        Location: !Ref ArtifactBucket
+        Location: !Ref AtaDbDeployPipelineArtifactStore
       Stages:
         Actions:
           - Name: Source
