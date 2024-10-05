@@ -9,6 +9,7 @@ phases:
   pre_build:
     commands:
       - echo "Pre-build phase entered..."
+      - cd $CODEBUILD_SRC_DIR
       - git submodule init
       - git submodule update --recursive
       - pip install -r service/requirements.txt -t service
