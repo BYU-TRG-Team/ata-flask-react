@@ -87,7 +87,6 @@ Resources:
                 BranchName: main
               OutputArtifacts:
                 - Name: SourceArtifact
-                - Name: Build
         - Name: Build
           Actions:
             - Name: Docker
