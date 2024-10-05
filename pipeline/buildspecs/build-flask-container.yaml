@@ -23,6 +23,5 @@ phases:
       - echo "Post-build phase entered..."
       - docker push $AWS_ECR_REPOSITORY_URI
 artifacts:
-  base-directory: dist/ata_flask_react
   files:
     - '**/*'
