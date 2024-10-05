@@ -112,20 +112,6 @@ Resources:
               OutputArtifacts:
                 - Name: BuildArtifact
               RunOrder: 1
-        - Name: Deploy
-          Actions:
-            - Name: Deploy
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: '1'
-              Configuration:
-                ActionMode: CREATE_UPDATE
-                StackName: ata-db-codebuild
-                RoleArn: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
-                TemplatePath: SourceArtifact::cloudformation/codebuild/
-                    
 
   CreateCluster:
     Type: AWS::ECS::Cluster
@@ -156,3 +142,16 @@ Resources:
       Tags:
         - Key: project
           Value: ata-db
+          
+  ECSService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref CreateCluster
+      DesiredCount: 1  # Number of tasks you want running
+      TaskDefinition: !Ref CreateTask
+      LaunchType: FARGATE  # Or EC2, depending on your setup
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED  # For public access, optional
+          Subnets:
+            - subnet-0cbc64d2bd8ebc763
