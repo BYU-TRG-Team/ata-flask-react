@@ -68,7 +68,7 @@ Resources:
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      RoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
+      RoleArn: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
       ArtifactStore:
         Type: S3
         Location: !Ref AtaDbDeployPipelineArtifactStore
@@ -114,7 +114,7 @@ Resources:
               Configuration:
                 ActionMode: CREATE_UPDATE
                 StackName: ata-db-codebuild
-                RoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
+                RoleArn: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
                 TemplatePath: SourceArtifact::cloudformation/codebuild/
                     
 
