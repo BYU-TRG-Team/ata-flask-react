@@ -68,7 +68,6 @@ Resources:
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      RoleARN: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
       ArtifactStore:
         Type: S3
         Location: !Ref AtaDbDeployPipelineArtifactStore
