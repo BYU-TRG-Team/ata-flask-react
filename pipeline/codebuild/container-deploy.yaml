@@ -59,6 +59,7 @@ Resources:
       ServiceRole: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
       Source:
         BuildSpec: pipeline/buildspecs/build-flask-container.yaml
+        GitCloneDepth: 1
         Type: CODEPIPELINE
       Tags:
         - Key: project
@@ -82,7 +83,7 @@ Resources:
                 Version: '1'
               Configuration:
                 ConnectionArn: arn:aws:codeconnections:us-east-1:767397767501:connection/515a1f58-898b-4cd6-95de-b23d42946107
-                FullRepositoryId: BYU-TRG-Team/ata-infrastructure-pipeline
+                FullRepositoryId: BYU-TRG-Team/ata-flask-react
                 BranchName: main
               OutputArtifacts:
                 - Name: SourceArtifact
