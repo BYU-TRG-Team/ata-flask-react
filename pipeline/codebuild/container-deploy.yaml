@@ -22,9 +22,6 @@ Resources:
     Properties:
       VpcId: !Ref AtaDbDeployVPC
       InternetGatewayId: !Ref AtaIntenetGateWay
-      Tags:
-        - Key: project
-          Value: ata-db
 
   PublicSubnet:
     Type: AWS::EC2::Subnet
