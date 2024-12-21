@@ -10,6 +10,7 @@ Resources:
         - Key: project
           Value: ata-db
   
+  
   AtaIntenetGateWay:
     Type: AWS::EC2::InternetGateway
     Properties:
@@ -23,6 +24,22 @@ Resources:
       VpcId: !Ref AtaDbDeployVPC
       InternetGatewayId: !Ref AtaIntenetGateWay
 
+  AtaPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref AtaDbDeployVPC
+      Tags:
+        - Key: project
+          Value: ata-db
+
+  AtaPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: AtaVPCGatewayAttachment
+    Properties:
+      RouteTableId: !Ref AtaPublicRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref AtaIntenetGateWay
+    
   PublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
@@ -41,6 +58,54 @@ Resources:
       Tags:
         - Key: project
           Value: ata-db
+
+  AtaPublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref AtaPublicRouteTable
+
+  # AtaNatGatewayAttachment:
+  #   Type: AWS::EC2::EIP
+  #   DependsOn: AtaVPCGatewayAttachment
+  #   Properties:
+  #     Domain: vpc
+  #     Tags:
+  #       - Key: project
+  #         Value: ata-db
+  
+  # AtaNatGateway:
+  #   Type: AWS::EC2::NatGateway
+  #   Properties:
+  #     AllocationId: !GetAtt AtaNatGatewayAttachment.AllocationId
+  #     SubnetId: !Ref PublicSubnet
+  #     Tags:
+  #       - Key: project
+  #         Value: ata-db
+
+  # AtaPrivateRouteTable:
+  #   Type: AWS::EC2::RouteTable
+  #   Properties:
+  #     VpcId: !Ref AtaDbDeployVPC
+  #     Tags:
+  #       - Key: project
+  #         Value: ata-db
+
+  # AtaPrivateRoute:
+  #   Type: AWS::EC2::Route
+  #   Properties:
+  #     RouteTableId: !Ref AtaPrivateRouteTable
+  #     DestinationCidrBlock: '0.0.0.0/0'
+  #     NatGatewayId: !Ref AtaNatGateway
+  #     Tags:
+  #       - Key: project
+  #         Value: ata-db
+  
+  # AtaPrivateSubnetRouteTableAssociation:
+  #   Type: AWS::EC2::SubnetRouteTableAssociation
+  #   Properties:
+  #     SubnetId: !Ref PrivateSubnet
+  #     RouteTableId: !Ref AtaPrivateRouteTable
 
   AtaDbDeploySecurityGroup:
     Type: AWS::EC2::SecurityGroup
