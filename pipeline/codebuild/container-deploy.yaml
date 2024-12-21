@@ -1,6 +1,52 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Resources:
+  // create a VPC for the ECS cluster running a Flask API
+  AtaDbDeployVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: project
+          Value: ata-db
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref AtaDbDeployVPC
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: project
+          Value: ata-db
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref AtaDbDeployVPC
+      CidrBlock: 10.0.2.0/24
+      Tags:
+        - Key: project
+          Value: ata-db
+
+  AtaDbDeploySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: ata-db-api-ecs-security-group
+      GroupDescription: Security group for ATA DB API
+      VpcId: !Ref AtaDbDeployVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5000
+          ToPort: 5000
+          CidrIp: 0.0.0.0/0
+      // allow outbound traffic to Postgres in RDS
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 10.0.0.0/16
+
   AtaDbDeployPipelineArtifactStore:
     Type: AWS::S3::Bucket
     Properties:
@@ -16,7 +62,6 @@ Resources:
   ECRRepository:
     Type: AWS::ECR::Repository
     Properties:
-      EmptyOnDelete: true
       RepositoryName: ata-db-api
       Tags:
         - Key: project
@@ -64,7 +109,6 @@ Resources:
         CloudWatchLogs: 
           GroupName: ata_db_api_docker_image_logs
           Status: ENABLED
-          StreamName: ata-db-api-
 
       ServiceRole: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
       Source:
@@ -154,4 +198,9 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED  # For public access, optional
           Subnets:
-            - subnet-0cbc64d2bd8ebc763
+            - !Ref PublicSubnet
+          SecurityGroups:
+            - !Ref AtaDbDeploySecurityGroup
+      Tags:
+        - Key: project
+          Value: ata-db
