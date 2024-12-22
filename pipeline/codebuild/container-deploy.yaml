@@ -266,6 +266,12 @@ Resources:
           PortMappings:
             - ContainerPort: 5000
             - ContainerPort: '{{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:port}}'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: /ecs/ata-db-api
+              awslogs-region: us-east-1
+              awslogs-stream-prefix: ecs
       Cpu: 256
       Memory: 512
       ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
