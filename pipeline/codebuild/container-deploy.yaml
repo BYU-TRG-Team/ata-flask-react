@@ -254,6 +254,7 @@ Resources:
 
   CreateTask:
     Type: AWS::ECS::TaskDefinition
+    DependsOn: CloudWatchLogGroup
     Properties:
       ContainerDefinitions:
         - Command: 
