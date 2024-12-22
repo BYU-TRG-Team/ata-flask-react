@@ -269,7 +269,7 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: /ecs/ata-db-api
+              awslogs-group: !Ref CloudWatchLogGroup
               awslogs-region: us-east-1
               awslogs-stream-prefix: ecs
       Cpu: 256
