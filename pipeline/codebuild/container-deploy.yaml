@@ -275,7 +275,7 @@ Resources:
               awslogs-stream-prefix: ecs
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-infrastructure-pipeline
+      ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-ecs-service
       NetworkMode: awsvpc
       Tags:
         - Key: project
