@@ -261,7 +261,7 @@ Resources:
           - python -m flask
           Environment:
             - Name: FLASK_APP
-              Value: dist/ata_flask_react
+              Value: dist/ata_flask_react/service
           Image: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}
           Name: ata-db-api
           PortMappings:

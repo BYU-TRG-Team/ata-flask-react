@@ -10,6 +10,8 @@ phases:
     commands:
       - echo "Pre-build phase entered..."
       - pip install -r service/requirements.txt -t service
+      - mkdir service/instance
+      - cd service/instance
   build:
     commands:
       - echo "Build phase entered..."
@@ -18,6 +20,7 @@ phases:
       - echo "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
       - echo "DB_PORT='$DB_PORT'\n" >> config.py 
       - echo "DB_NAME='$DB_NAME'\n" >> config.py
+      - cd ../..
       - docker build -t $AWS_ECR_REPOSITORY_URI .
   post_build:
     commands:
