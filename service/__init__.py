@@ -44,44 +44,52 @@ def create_app(test_config=None):
     app.logger.setLevel(logging.INFO)
     app.logger.addHandler(handler)
 
-    # create a CloudWatch Logs client.
-    cw_client = boto3.client('logs')
-    log_group_name = 'ata_db_api_docker_image_logs'
-    log_stream_name = 'ata-db'
-
-    # create a CloudWatch Logs stream.
+    # check if we can connect to AWS
     try:
-        cw_client.create_log_stream(
-            logGroupName=log_group_name,
-            logStreamName=log_stream_name
-        )
-    except botocore.exceptions.ClientError as e:
-        if e.response['Error']['Code'] == 'ResourceAlreadyExistsException':
-            pass
-        else:
-            raise
+        boto3.client('sts').get_caller_identity()
+        aws_connected = True
+    except botocore.exceptions.NoCredentialsError:
+        aws_connected = False
 
-    # send logs to CloudWatch.
-    class CloudWatchHandler(logging.Handler):
-        def __init__(self):
-            logging.Handler.__init__(self)
+    if aws_connected:
+        # create a CloudWatch Logs client.
+        cw_client = boto3.client('logs')
+        log_group_name = 'ata_db_api_docker_image_logs'
+        log_stream_name = 'ata-db'
 
-        def emit(self, record):
-            log_entry = self.format(record)
-            cw_client.put_log_events(
+        # create a CloudWatch Logs stream.
+        try:
+            cw_client.create_log_stream(
                 logGroupName=log_group_name,
-                logStreamName=log_stream_name,
-                logEvents=[
-                    {
-                        'timestamp': int(record.created * 1000),
-                        'message': log_entry
-                    }
-                ]
+                logStreamName=log_stream_name
             )
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == 'ResourceAlreadyExistsException':
+                pass
+            else:
+                raise
 
-    cw_handler = CloudWatchHandler()
-    cw_handler.setLevel(logging.INFO)
-    cw_handler.setFormatter(formatter)
-    app.logger.addHandler(cw_handler)
+        # send logs to CloudWatch.
+        class CloudWatchHandler(logging.Handler):
+            def __init__(self):
+                logging.Handler.__init__(self)
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                cw_client.put_log_events(
+                    logGroupName=log_group_name,
+                    logStreamName=log_stream_name,
+                    logEvents=[
+                        {
+                            'timestamp': int(record.created * 1000),
+                            'message': log_entry
+                        }
+                    ]
+                )
+
+        cw_handler = CloudWatchHandler()
+        cw_handler.setLevel(logging.INFO)
+        cw_handler.setFormatter(formatter)
+        app.logger.addHandler(cw_handler)
 
     return app
