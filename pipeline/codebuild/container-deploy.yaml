@@ -245,6 +245,7 @@ Resources:
                 Provider: CloudFormation
                 Version: '1'
               Configuration:
+                ActionMode: CREATE_UPDATE
                 StackName: ata-db-api-stack
                 Capabilities: CAPABILITY_NAMED_IAM
                 TemplatePath: BuildArtifact::container-deploy.yaml
