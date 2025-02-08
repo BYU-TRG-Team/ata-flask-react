@@ -305,3 +305,7 @@ Outputs:
   EC2InstancePublicIP:
     Description: Public IP address of the EC2 instance
     Value: !GetAtt EC2Instance.PublicIp
+
+Capabilities:
+  - CAPABILITY_IAM
+  - CAPABILITY_NAMED_IAM
