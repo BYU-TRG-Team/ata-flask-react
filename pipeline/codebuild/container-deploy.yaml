@@ -299,7 +299,7 @@ Resources:
       SecurityGroupIds:
         - !Ref AtaDbDeploySecurityGroup
       SubnetId: !Ref PublicSubnet
-      ImageId: ami-0c55b159cbfafe1f0  # Amazon Linux 2 AMI (HVM), SSD Volume Type
+      ImageId: ami-085ad6ae776d8f09c
       IamInstanceProfile: !Ref EC2InstanceProfile
       KeyName: ata-db-api
       Tags:
