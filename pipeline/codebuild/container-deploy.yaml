@@ -290,6 +290,7 @@ Resources:
                   - iam:DeleteInstanceProfile
                   - iam:CreateInstanceProfile
                   - iam:AddRoleToInstanceProfile
+                  - iam:PassRole  
                 Resource: '*'
 
   EC2InstanceProfile:
