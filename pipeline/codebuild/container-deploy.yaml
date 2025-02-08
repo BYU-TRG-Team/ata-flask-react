@@ -284,14 +284,6 @@ Resources:
                 Action:
                   - s3:GetObject
                 Resource: arn:aws:s3:::ata-db-deploy-pipeline-artifact-store/*
-              - Effect: Allow
-                Action:
-                  - iam:RemoveRoleFromInstanceProfile
-                  - iam:DeleteInstanceProfile
-                  - iam:CreateInstanceProfile
-                  - iam:AddRoleToInstanceProfile
-                  - iam:PassRole  
-                Resource: '*'
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
