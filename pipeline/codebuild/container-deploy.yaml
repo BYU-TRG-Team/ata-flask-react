@@ -244,6 +244,7 @@ Resources:
                 StackName: ata-db-api-stack
                 Capabilities: CAPABILITY_NAMED_IAM
                 TemplatePath: BuildArtifact::container-deploy.yaml
+                RoleArn: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
               InputArtifacts:
                 - Name: BuildArtifact
               RunOrder: 1
