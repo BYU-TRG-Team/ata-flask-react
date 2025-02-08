@@ -279,6 +279,7 @@ Resources:
                   - ec2:StartInstances
                   - ec2:StopInstances
                   - ec2:TerminateInstances
+                  - iam:*
                 Resource: '*'
               - Effect: Allow
                 Action:
@@ -287,6 +288,7 @@ Resources:
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
+    DependsOn: EC2InstanceRole
     Properties:
      Roles:
         - !Ref EC2InstanceRole
