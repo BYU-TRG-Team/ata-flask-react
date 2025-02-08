@@ -236,6 +236,21 @@ Resources:
               OutputArtifacts:
                 - Name: BuildArtifact
               RunOrder: 1
+        - Name: Deploy
+          Actions:
+            - Name: DeployAction
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                StackName: ata-db-api-stack
+                Capabilities: CAPABILITY_IAM,CAPABILITY_NAMED_IAM
+                TemplatePath: BuildArtifact::container-deploy.yaml
+              InputArtifacts:
+                - Name: BuildArtifact
+              RunOrder: 1
       Tags:
         - Key: project
           Value: ata-db
@@ -305,7 +320,3 @@ Outputs:
   EC2InstancePublicIP:
     Description: Public IP address of the EC2 instance
     Value: !GetAtt EC2Instance.PublicIp
-
-Capabilities:
-  - CAPABILITY_IAM
-  - CAPABILITY_NAMED_IAM
