@@ -11,9 +11,10 @@ env:
 phases:
   install:
     runtime-versions: 
-      python: 3.8  # Ensure this matches the required Python version
+      python: 3.9
     commands:
       - echo "Install phase entered..."
+      - python --version
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
   pre_build:
     commands:

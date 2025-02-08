@@ -5,6 +5,7 @@ FROM python:3.8-slim
 WORKDIR /app
 
 COPY service/requirements.txt requirements.txt
+RUN python --version
 RUN pip install -r requirements.txt
 
 COPY . .
