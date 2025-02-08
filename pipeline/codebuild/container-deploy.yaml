@@ -279,6 +279,19 @@ Resources:
                 Action:
                   - s3:GetObject
                 Resource: arn:aws:s3:::ata-db-deploy-pipeline-artifact-store/*
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                Resource: '*'
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
@@ -292,46 +305,48 @@ Resources:
     Properties:
       InstanceType: t2.micro
       SecurityGroupIds:
-        - !Ref AtaDbDeploySecurityGroup
+      - !Ref AtaDbDeploySecurityGroup
       SubnetId: !Ref PublicSubnet
       ImageId: ami-04681163a08179f28 # Amazon Linux 2 AMI (HVM), SSD Volume Type
       IamInstanceProfile: !Ref EC2InstanceProfile
       KeyName: ata-db-api
       Tags:
-        - Key: project
-          Value: ata-db
+      - Key: project
+        Value: ata-db
+      - Key: Name
+        Value: ata-db-api
       UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          yum install -y awslogs
-          cat <<EOF >> /etc/awslogs/awslogs.conf
-          [general]
-          state_file = /var/lib/awslogs/agent-state
+      Fn::Base64: !Sub |
+        #!/bin/bash
+        yum install -y awslogs
+        cat <<EOF >> /etc/awslogs/awslogs.conf
+        [general]
+        state_file = /var/lib/awslogs/agent-state
 
-          [/var/log/messages]
-          file = /var/log/messages
-          log_group_name = ata_db_api_docker_image_logs
-          log_stream_name = {instance_id}/var/log/messages
-          datetime_format = %b %d %H:%M:%S
+        [/var/log/messages]
+        file = /var/log/messages
+        log_group_name = ata_db_api_docker_image_logs
+        log_stream_name = {instance_id}/var/log/messages
+        datetime_format = %b %d %H:%M:%S
 
-          [/var/log/docker]
-          file = /var/log/docker
-          log_group_name = ata_db_api_docker_image_logs
-          log_stream_name = {instance_id}/var/log/docker
-          datetime_format = %Y-%m-%dT%H:%M:%S.%f
-          EOF
+        [/var/log/docker]
+        file = /var/log/docker
+        log_group_name = ata_db_api_docker_image_logs
+        log_stream_name = {instance_id}/var/log/docker
+        datetime_format = %Y-%m-%dT%H:%M:%S.%f
+        EOF
 
-          service awslogs start
-          chkconfig awslogs on
-          yum update -y
-          yum install -y python3 git
-          yum install -y docker
-          service docker start
-          usermod -a -G docker ec2-user
-          chkconfig docker on
-          $(aws ecr get-login --no-include-email --region us-east-1)
-          docker pull 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
-          docker run -d -p 80:5000 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+        service awslogs start
+        chkconfig awslogs on
+        yum update -y
+        yum install -y python3 git
+        yum install -y docker
+        service docker start
+        usermod -a -G docker ec2-user
+        chkconfig docker on
+        $(aws ecr get-login --no-include-email --region us-east-1)
+        docker pull 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+        docker run -d -p 80:5000 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
 
 Outputs:
   EC2InstancePublicIP:
