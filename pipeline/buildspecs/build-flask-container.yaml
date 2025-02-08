@@ -10,8 +10,8 @@ env:
 
 phases:
   install:
-    runtime-versions: 
-      python: 3.9
+    # runtime-versions: 
+    #   python: 3.9
     commands:
       - echo "Install phase entered..."
       - python --version
@@ -19,7 +19,7 @@ phases:
   pre_build:
     commands:
       - echo "Pre-build phase entered..."
-      - pip install -r service/requirements.txt -t service
+      # - pip install -r service/requirements.txt -t service
       - mkdir service/instance
       - cd service/instance
   build:
