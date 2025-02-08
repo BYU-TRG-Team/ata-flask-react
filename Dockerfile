@@ -12,5 +12,5 @@ COPY . .
 
 RUN mkdir -p logs
 
-ENV FLASK_APP=service/app.py
+ENV FLASK_APP=service/__init__.py
 CMD ["flask", "run", "--host=0.0.0.0"]
