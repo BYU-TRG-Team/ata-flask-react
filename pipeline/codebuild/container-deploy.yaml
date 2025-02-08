@@ -110,24 +110,21 @@ Resources:
   AtaDbDeploySecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: ata-db-api-ecs-security-group
-      GroupDescription: Security group for ATA DB API
+      GroupName: ata-db-api-ec2-security-group
+      GroupDescription: Security group for ATA DB API EC2 instance
       VpcId: !Ref AtaDbDeployVPC
       SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 5000
           ToPort: 5000
           CidrIp: 0.0.0.0/0
-      # allow outbound traffic to Postgres in RDS
       SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: 443 
-          ToPort: 443 
+        - IpProtocol: -1
           CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 5432
-          ToPort: 5432
-          CidrIp: 10.0.0.0/16
       Tags:
         - Key: project
           Value: ata-db
@@ -244,57 +241,68 @@ Resources:
         - Key: project
           Value: ata-db
 
-  CreateCluster:
-    Type: AWS::ECS::Cluster
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
     Properties:
-      ClusterName: ata-db-api
-      Tags:
-        - Key: project
-          Value: ata-db
+      Roles:
+        - !Ref EC2InstanceRole
 
-  CreateTask:
-    Type: AWS::ECS::TaskDefinition
-    DependsOn: CloudWatchLogGroup
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
     Properties:
-      ContainerDefinitions:
-        - Command: 
-          - python -m flask
-          Environment:
-            - Name: FLASK_APP
-              Value: dist/ata_flask_react/service
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/${ECRRepository}
-          Name: ata-db-api
-          PortMappings:
-            - ContainerPort: 5000
-            - ContainerPort: '{{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:port}}'
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-              awslogs-group: !Ref CloudWatchLogGroup
-              awslogs-region: us-east-1
-              awslogs-stream-prefix: ecs
-      Cpu: 256
-      Memory: 512
-      ExecutionRoleArn: arn:aws:iam::767397767501:role/ata-db-deploy-ecs-service
-      NetworkMode: awsvpc
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: EC2InstancePolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:Describe*
+                  - ec2:AttachVolume
+                  - ec2:DetachVolume
+                  - ec2:StartInstances
+                  - ec2:StopInstances
+                  - ec2:TerminateInstances
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: arn:aws:s3:::ata-db-deploy-pipeline-artifact-store/*
+
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      SecurityGroupIds:
+        - !Ref AtaDbDeploySecurityGroup
+      SubnetId: !Ref PublicSubnet
+      ImageId: ami-0c55b159cbfafe1f0  # Amazon Linux 2 AMI (HVM), SSD Volume Type
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      KeyName: ata-db-api
       Tags:
         - Key: project
           Value: ata-db
-          
-  ECSService:
-    Type: AWS::ECS::Service
-    Properties:
-      Cluster: !Ref CreateCluster
-      DesiredCount: 1  # Number of tasks you want running
-      TaskDefinition: !Ref CreateTask
-      LaunchType: FARGATE  # Or EC2, depending on your setup
-      NetworkConfiguration:
-        AwsvpcConfiguration:
-          AssignPublicIp: ENABLED  # For public access, optional
-          Subnets:
-            - !Ref PublicSubnet
-          SecurityGroups:
-            - !Ref AtaDbDeploySecurityGroup
-      Tags:
-        - Key: project
-          Value: ata-db
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 git
+          amazon-linux-extras install docker -y
+          service docker start
+          usermod -a -G docker ec2-user
+          chkconfig docker on
+          $(aws ecr get-login --no-include-email --region us-east-1)
+          docker pull ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+          docker run -d -p 5000:5000 ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+
+Outputs:
+  EC2InstancePublicIP:
+    Description: Public IP address of the EC2 instance
+    Value: !GetAtt EC2Instance.PublicIp
