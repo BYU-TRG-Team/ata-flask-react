@@ -246,7 +246,7 @@ Resources:
                 Version: '1'
               Configuration:
                 StackName: ata-db-api-stack
-                Capabilities: CAPABILITY_IAM
+                Capabilities: CAPABILITY_NAMED_IAM
                 TemplatePath: BuildArtifact::container-deploy.yaml
               InputArtifacts:
                 - Name: BuildArtifact
