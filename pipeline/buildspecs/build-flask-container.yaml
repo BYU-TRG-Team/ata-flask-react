@@ -21,11 +21,11 @@ phases:
   build:
     commands:
       - echo "Build phase entered..."
-      - echo "DB_HOST='$DB_HOST'\n" >> config.py
-      - echo "DB_USER='$DB_USERNAME'\n" >> config.py
-      - echo "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
-      - echo "DB_PORT='$DB_PORT'\n" >> config.py 
-      - echo "DB_NAME='$DB_NAME'\n" >> config.py
+      - printf "DB_HOST='$DB_HOST'\n" >> config.py
+      - printf "DB_USER='$DB_USERNAME'\n" >> config.py
+      - printf "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
+      - printf "DB_PORT='$DB_PORT'\n" >> config.py 
+      - printf "DB_NAME='$DB_NAME'\n" >> config.py
       - cd ..
       - docker build -t $AWS_ECR_REPOSITORY_URI .
   post_build:
