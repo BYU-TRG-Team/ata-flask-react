@@ -171,10 +171,8 @@ Resources:
         Image: aws/codebuild/amazonlinux2-x86_64-standard:4.0
         Type: LINUX_CONTAINER
         EnvironmentVariables:
-          - Name: AWS_ACCOUNT_ID
-            Value: !Ref "AWS::AccountId"
           - Name: AWS_ECR_REPOSITORY_URI
-            Value: !Sub ${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+            Value: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
           - Name: ARTIFACT_FILE
             Value: !Ref ECRRepository
           - Name: RDS_HOST
@@ -300,8 +298,8 @@ Resources:
           usermod -a -G docker ec2-user
           chkconfig docker on
           $(aws ecr get-login --no-include-email --region us-east-1)
-          docker pull ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
-          docker run -d -p 5000:5000 ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+          docker pull 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+          docker run -d -p 5000:5000 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
 
 Outputs:
   EC2InstancePublicIP:
