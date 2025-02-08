@@ -233,7 +233,7 @@ Resources:
                   - ecr:BatchCheckLayerAvailability
                   - ecr:GetDownloadUrlForLayer
                   - ecr:BatchGetImage
-                Resource: !Sub arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/${ECRRepository}
+                Resource: '*'
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
