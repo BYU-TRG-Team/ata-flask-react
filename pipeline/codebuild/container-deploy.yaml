@@ -193,6 +193,48 @@ Resources:
         - Key: project
           Value: ata-db
 
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: ata-db-api-pipeline
+      RoleArn: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
+      ArtifactStore:
+        Type: S3
+        Location: !Ref AtaDbDeployPipelineArtifactStore
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: CodeStarSourceConnection
+                Version: '1'
+              Configuration:
+                ConnectionArn: arn:aws:codeconnections:us-east-1:767397767501:connection/515a1f58-898b-4cd6-95de-b23d42946107
+                FullRepositoryId: BYU-TRG-Team/ata-flask-react
+                BranchName: main
+              OutputArtifacts:
+                - Name: SourceArtifact
+        - Name: Build
+          Actions:
+            - Name: Docker
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: '1'
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref BuildContainer
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+              RunOrder: 1
+      Tags:
+        - Key: project
+          Value: ata-db
+
   EC2InstanceRole:
     Type: AWS::IAM::Role
     Properties:
