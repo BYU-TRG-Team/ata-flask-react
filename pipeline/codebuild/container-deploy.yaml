@@ -256,12 +256,6 @@ Resources:
         - Key: project
           Value: ata-db
 
-  EC2InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Roles:
-        - !Ref EC2InstanceRole
-
   EC2InstanceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -290,6 +284,12 @@ Resources:
                 Action:
                   - s3:GetObject
                 Resource: arn:aws:s3:::ata-db-deploy-pipeline-artifact-store/*
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+     Roles:
+        - !Ref EC2InstanceRole
 
   EC2Instance:
     Type: AWS::EC2::Instance
