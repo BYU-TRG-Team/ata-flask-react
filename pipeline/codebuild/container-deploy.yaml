@@ -171,6 +171,8 @@ Resources:
         Image: aws/codebuild/amazonlinux2-x86_64-standard:4.0
         Type: LINUX_CONTAINER
         EnvironmentVariables:
+          - Name: AWS_ACCOUNT_ID
+            Value: 767397767501
           - Name: AWS_ECR_REPOSITORY_URI
             Value: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
           - Name: ARTIFACT_FILE
