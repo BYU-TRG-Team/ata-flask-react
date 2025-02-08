@@ -203,6 +203,7 @@ Resources:
   Pipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
+      Name: ata-db-api-pipeline
       RoleArn: arn:aws:iam::767397767501:role/service-role/AWSCodePipelineServiceRole-us-east-1-ata-db-api-deploy
       ArtifactStore:
         Type: S3
