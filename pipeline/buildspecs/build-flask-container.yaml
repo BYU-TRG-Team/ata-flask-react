@@ -1,11 +1,20 @@
 version: 0.2
+
+env:
+  secrets-manager:
+    DB_HOST:     ATA_DB_CREDENTIALS:host
+    DB_USERNAME: ATA_DB_CREDENTIALS:username
+    DB_PASSWORD: ATA_DB_CREDENTIALS:password
+    DB_PORT:     ATA_DB_CREDENTIALS:port
+    DB_NAME:     ata-db-name:ata-db-name
+
 phases:
   install:
     runtime-versions: 
       python: 3.9
     commands:
       - echo "Install phase entered..."
-      - echo "ACCOUNT ID:: AWS_ACCOUNT_ID"
+      - echo "ACCOUNT ID is $AWS_ACCOUNT_ID"
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
   pre_build:
     commands:

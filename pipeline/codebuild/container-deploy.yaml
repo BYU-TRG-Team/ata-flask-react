@@ -173,20 +173,13 @@ Resources:
         EnvironmentVariables:
           - Name: AWS_ACCOUNT_ID
             Value: 767397767501
+            Type: PLAINTEXT
           - Name: AWS_ECR_REPOSITORY_URI
             Value: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
+            Type: PLAINTEXT
           - Name: ARTIFACT_FILE
             Value: !Ref ECRRepository
-          - Name: RDS_HOST
-            Value: '{{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:host}}'
-          - Name: DB_NAME
-            Value: '{{resolve:secretsmanager:ata-db-name:SecretString:ata-db-name}}'
-          - Name: DB_PORT
-            Value: '{{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:port}}'
-          - Name: DB_USERNAME
-            Value: '{{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:username}}'
-          - Name: DB_PASSWORD
-            Value: '{{resolve:secretsmanager:ATA_DB_CREDENTIALS:SecretString:password}}'
+            Type: PLAINTEXT
       LogsConfig:
         CloudWatchLogs: 
           GroupName: ata_db_api_docker_image_logs
