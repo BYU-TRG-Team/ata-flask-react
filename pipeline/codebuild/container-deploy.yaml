@@ -291,7 +291,7 @@ Resources:
                   - ecr:BatchCheckLayerAvailability
                   - ecr:GetDownloadUrlForLayer
                   - ecr:BatchGetImage
-                Resource: '*'
+                Resource: $Ref ECRRepository
 
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
