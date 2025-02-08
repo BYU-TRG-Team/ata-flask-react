@@ -28,6 +28,9 @@ def create_app(test_config=None):
     app.register_blueprint(errors.bp)
     app.register_blueprint(filters.bp)
 
+    if not os.path.exists('logs'):
+        os.makedirs('logs')
+
     # create a file handler
     handler = RotatingFileHandler('logs/ata-db.log', maxBytes=10000, backupCount=1)
     handler.setLevel(logging.INFO)

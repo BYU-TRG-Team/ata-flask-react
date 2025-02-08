@@ -10,4 +10,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+RUN mkdir -p logs
+
+ENV FLASK_APP=service/app.py
 CMD ["flask", "run", "--host=0.0.0.0"]
