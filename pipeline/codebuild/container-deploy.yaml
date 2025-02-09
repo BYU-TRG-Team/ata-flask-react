@@ -274,6 +274,21 @@ Resources:
               OutputArtifacts:
                 - Name: BuildArtifact
               RunOrder: 1
+        - Name: BuildFrontend
+          Actions:
+            - Name: Docker
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: '1'
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref FrontendBuildContainer
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+              RunOrder: 1
       Tags:
         - Key: project
           Value: ata-db
