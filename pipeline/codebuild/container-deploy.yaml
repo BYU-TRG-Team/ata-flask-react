@@ -309,9 +309,6 @@ Resources:
                 BranchName: main
               OutputArtifacts:
                 - Name: SourceArtifact
-                  Paths:
-                    - 'service/*'
-                    - 'frontend/*'
         - Name: BuildBackend
           Actions:
             - Name: Docker
@@ -324,8 +321,6 @@ Resources:
                 ProjectName: !Ref BuildContainer
               InputArtifacts:
                 - Name: SourceArtifact
-                  Paths:
-                    - 'service/*'
               OutputArtifacts:
                 - Name: BuildArtifact
               RunOrder: 1
@@ -341,8 +336,6 @@ Resources:
                 ProjectName: !Ref FrontendBuildContainer
               InputArtifacts:
                 - Name: SourceArtifact
-                  Paths:
-                    - 'frontend/*'
               OutputArtifacts:
                 - Name: FrontendBuildArtifact
               RunOrder: 1
