@@ -456,7 +456,9 @@ Resources:
           usermod -a -G docker ec2-user
           chkconfig docker on
           aws configure set region us-east-1
-          aws ssm get-parameter --name "/ata-db/compose.yml" --query "Parameter.Value" --output text > /home/ec2-user/compose.yml
+          aws ecr get-login --no-include-email --region us-east-1
+          touch compose.yml
+          aws ssm get-parameter --name "/ata-db/compose.yml" --query "Parameter.Value" --output text > compose.yml
           docker compose -f /home/ec2-user/compose.yml up -d
 
 Outputs:
