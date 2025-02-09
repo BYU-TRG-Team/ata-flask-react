@@ -7,12 +7,8 @@ WORKDIR /app
 
 COPY --from=flask /app /app
 
-
 COPY --from=frontend /etc/ssl/certs/selfsigned.crt /etc/ssl/certs/selfsigned.crt
 COPY --from=frontend /etc/ssl/private/selfsigned.key /etc/ssl/private/selfsigned.key
-
-# Ensure nginx is installed
-RUN apk add --no-cache nginx openssl
 
 COPY --from=frontend /etc/nginx/conf.d/default-ssl.conf /etc/nginx/conf.d/default-ssl.conf
 COPY --from=frontend /usr/share/nginx/html /usr/share/nginx/html
