@@ -16,7 +16,6 @@ phases:
   pre_build:
     commands:
       - echo "Pre-build phase entered..."
-      - cd service
       - mkdir instance
       - cd instance
   build:
@@ -27,7 +26,7 @@ phases:
       - printf "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
       - printf "DB_PORT='$DB_PORT'\n" >> config.py 
       - printf "DB_NAME='$DB_NAME'\n" >> config.py
-      - cd ..
+      - cd ../service
       - docker build -t $AWS_ECR_REPOSITORY_URI .
   post_build:
     commands:

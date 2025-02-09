@@ -119,8 +119,8 @@ Resources:
           ToPort: 22
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
+          FromPort: 443
+          ToPort: 443
           CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
         - IpProtocol: -1
@@ -390,7 +390,7 @@ Resources:
           docker pull 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
           docker run -d -p 5000:5000 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
           docker pull 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-frontend:latest
-          docker run -d -p 80:80 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-frontend:latest
+          docker run -d -p 443:443 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-frontend:latest
 
 Outputs:
   EC2InstancePublicIP:
