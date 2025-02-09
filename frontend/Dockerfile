@@ -1,0 +1,21 @@
+FROM public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:4.0 AS build
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm i 
+RUN npx vite build
+
+
+FROM nginx:alpine
+
+# Remove the default Nginx HTML directory
+RUN rm -rf /usr/share/nginx/html/*
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+ENV NODE_ENV=production
+ENV AWS_DEFAULT_REGION=us-east-1
+
+CMD ["nginx", "-g", "daemon off;"]

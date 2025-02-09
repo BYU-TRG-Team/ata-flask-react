@@ -16,6 +16,7 @@ phases:
   pre_build:
     commands:
       - echo "Pre-build phase entered..."
+      - cd service
       - mkdir instance
       - cd instance
   build:

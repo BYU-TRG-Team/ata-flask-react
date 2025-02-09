@@ -1,11 +1,8 @@
 FROM public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:4.0 AS build
 
-FROM python:3.9-slim
-
 WORKDIR /app
 
-COPY service/requirements.txt requirements.txt
-RUN python --version
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
@@ -13,5 +10,5 @@ COPY . .
 RUN mkdir -p logs
 
 ENV AWS_DEFAULT_REGION=us-east-1
-ENV FLASK_APP=service/__init__.py
+ENV FLASK_APP=__init__.py
 CMD ["flask", "run", "--host=0.0.0.0"]
