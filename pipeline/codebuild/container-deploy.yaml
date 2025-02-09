@@ -287,7 +287,7 @@ Resources:
               InputArtifacts:
                 - Name: SourceArtifact
               OutputArtifacts:
-                - Name: BuildArtifact
+                - Name: FrontendBuildArtifact
               RunOrder: 1
       Tags:
         - Key: project
