@@ -20,8 +20,8 @@ def create_app(test_config=None):
     with app.app_context():
         from . import db
     
-    from . import server
-    app.register_blueprint(server.bp)
+    # from . import server
+    # app.register_blueprint(server.bp)
 
     from .api import counts, errors, filters
     app.register_blueprint(counts.bp)

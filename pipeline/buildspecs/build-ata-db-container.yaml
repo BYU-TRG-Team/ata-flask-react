@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Install phase entered..."
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+  pre_build:
+    commands:
+      - echo "Pre-build phase entered..."
+  build:
+    commands:
+      - echo "Build phase entered..."
+      - docker compose build -t $AWS_ECR_REPOSITORY_URI .
+  post_build:
+    commands:
+      - echo "Post-build phase entered..."
+      - docker push $AWS_ECR_REPOSITORY_URI
+artifacts:
+  files:
+    - '**/*'
