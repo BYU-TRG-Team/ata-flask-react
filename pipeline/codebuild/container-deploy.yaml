@@ -307,15 +307,6 @@ Resources:
                 ConnectionArn: arn:aws:codeconnections:us-east-1:767397767501:connection/515a1f58-898b-4cd6-95de-b23d42946107
                 FullRepositoryId: BYU-TRG-Team/ata-flask-react
                 BranchName: main
-                WebhookFilters:
-                  - Type: FilePath
-                    Pattern: 'service/*'
-                  - Type: FilePath
-                    Pattern: 'frontend/*'
-                  - Type: FilePath
-                    Pattern: 'pipeline/buildspecs/*'
-                  - Type: FilePath
-                    Pattern: 'Dockerfile'                
               OutputArtifacts:
                 - Name: SourceArtifact
         - Name: BuildBackend
