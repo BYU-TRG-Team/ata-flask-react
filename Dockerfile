@@ -8,6 +8,9 @@ WORKDIR /app
 COPY --from=flask /app /app
 COPY --from=frontend /etc/nginx/conf.d/default-ssl.conf /etc/nginx/conf.d/default-ssl.conf
 
+# Ensure nginx is installed
+RUN apk add --no-cache nginx openssl
+
 EXPOSE 80 443
 
 CMD nginx -g 'daemon off;' && flask run --host="0.0.0.0" --port=5000
