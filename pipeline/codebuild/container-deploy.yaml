@@ -149,7 +149,7 @@ Resources:
         - Key: project
           Value: ata-db
 
-  ECRRepository_Frontend:
+  ECRRepositoryFrontend:
     Type: AWS::ECR::Repository
     Properties:
       RepositoryName: ata-db-frontend
@@ -221,7 +221,7 @@ Resources:
             Value: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-frontend:latest
             Type: PLAINTEXT
           - Name: ARTIFACT_FILE
-            Value: !Ref ECRRepository_Frontend
+            Value: !Ref ECRRepositoryFrontend
             Type: PLAINTEXT
       LogsConfig:
         CloudWatchLogs: 
