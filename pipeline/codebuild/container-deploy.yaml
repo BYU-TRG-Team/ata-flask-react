@@ -452,8 +452,8 @@ Resources:
           usermod -a -G docker ec2-user
           chkconfig docker on
           $(aws ecr get-login --no-include-email --region us-east-1)
-          docker pull 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db:latest
-          docker run -d -p 80:80 -p 443:443 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db:latest
+          aws ssm get-parameter --name "/ata-db/docker-compose" --query "Parameter.Value" --output text > /home/ec2-user/compose.yml
+          docker compose -f /home/ec2-user/compose.yml up -d
 
 Outputs:
   EC2InstancePublicIP:

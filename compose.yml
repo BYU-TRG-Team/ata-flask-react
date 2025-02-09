@@ -2,14 +2,14 @@ version: '3.7'
 
 services:
   flask:
-    build: ./service
+    image: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
     ports:
       - '5000:5000'
     networks:
       - ata-network
 
   nginx:
-    build: ./frontend
+    image: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-frontend:latest
     ports:
       - '80:80'
       - '443:443'

@@ -1,7 +1,7 @@
 FROM 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest as flask
 FROM 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-frontend:latest as frontend
 
-FROM alpine:3.14
+FROM nginx
 
 WORKDIR /app
 

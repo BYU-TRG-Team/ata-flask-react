@@ -11,11 +11,10 @@ phases:
   build:
     commands:
       - echo "Build phase entered..."
-      - docker build -t $AWS_ECR_REPOSITORY_URI . 
+      - aws ssm put-parameter --name "/ata-db/compose.yml" --type "String" --value "file://compose.yml"
   post_build:
     commands:
       - echo "Post-build phase entered..."
-      - docker push $AWS_ECR_REPOSITORY_URI
 artifacts:
   files:
     - '**/*'
