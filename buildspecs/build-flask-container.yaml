@@ -17,19 +17,21 @@ phases:
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"service/"* ]]; then 
           echo "No backend changes, skipping build."; 
-          touch /codebuild/output/skip_build
+          export SKIP_BUILD=1
           exit 0; 
         fi
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
   pre_build:
     commands:
-      - if [[ -e /codebuild/output/skip_build ]]; then exit 0; fi;
       - echo "Pre-build phase entered..."
-      - mkdir ./service/instance
-      - cd ./service/instance
+      - |
+        if [[ $SKIP_BUILD == 1 ]]; then
+          exit 0;
+        fi;
+        mkdir ./service/instance
+        cd ./service/instance
   build:
     commands:
-      - if [[ -e /codebuild/output/skip_build ]]; then exit 0; fi;
       - echo "Build phase entered..."
       - printf "DB_HOST='$DB_HOST'\n" >> config.py
       - printf "DB_USER='$DB_USERNAME'\n" >> config.py
@@ -40,7 +42,6 @@ phases:
       - docker build -t $AWS_ECR_REPOSITORY_URI .
   post_build:
     commands:
-      - if [[ -e /codebuild/output/skip_build ]]; then exit 0; fi;
       - echo "Post-build phase entered..."
       - docker push $AWS_ECR_REPOSITORY_URI
 artifacts:

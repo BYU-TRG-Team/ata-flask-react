@@ -9,22 +9,18 @@ phases:
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"compose.yml"* ]]; then 
           echo "No compose changes, skipping build."; 
-          touch /codebuild/output/skip_build
-          exit 0; 
+          exit 1; 
         fi
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
   pre_build:
     commands:
-      - if [[ -e /codebuild/output/skip_build ]]; then exit 0; fi;
       - echo "Pre-build phase entered..."
   build:
     commands:
-      - if [[ -e /codebuild/output/skip_build ]]; then exit 0; fi;
       - echo "Build phase entered..."
       - aws ssm put-parameter --name "/ata-db/compose.yml" --type "String" --value "file://compose.yml" --overwrite
   post_build:
     commands:
-      - if [[ -e /codebuild/output/skip_build ]]; then exit 0; fi;
       - echo "Post-build phase entered..."
 artifacts:
   files:
