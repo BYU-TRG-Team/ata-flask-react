@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Install phase entered..."
+      # - echo "Checking for frontend file changes..."
+      - CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+      - if [[ "$CHANGED_FILES" != *"frontend/"* ]]; then echo "No frontend changes, skipping build."; exit 0; fi
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+  pre_build:
+    commands:
+      - echo "Pre-build phase entered..."
+      - cd frontend 
+  build:
+    commands:
+      - echo "Build phase entered..."
+      - docker build -t $AWS_ECR_REPOSITORY_URI .
+  post_build:
+    commands:
+      - echo "Post-build phase entered..."
+      - docker push $AWS_ECR_REPOSITORY_URI
+artifacts:
+  files:
+    - '**/*'
