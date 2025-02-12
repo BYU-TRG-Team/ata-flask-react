@@ -12,6 +12,7 @@ phases:
   build:
     commands:
       - |
+        echo $ARTIFACT_FILE
         echo "Build phase entered..."
         echo "Checking for backend file changes...";
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
@@ -35,7 +36,7 @@ phases:
 
         docker build -t $AWS_ECR_REPOSITORY_URI .
         docker push $AWS_ECR_REPOSITORY_URI
-        
+
 artifacts:
   files:
     - '**/*'
