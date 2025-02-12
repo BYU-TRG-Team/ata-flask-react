@@ -4,8 +4,9 @@ phases:
   install:
     commands:
       - |
-        echo "Install phase entered..."
-        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+        echo "Install phase entered...";
+        echo "Checking if compose.yml has changed...";
+        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"compose.yml"* ]]; then 
           echo "No compose changes, skipping build."; 
           exit 0; 

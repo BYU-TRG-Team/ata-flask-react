@@ -4,9 +4,9 @@ phases:
   install:
     commands:
       - |
-        echo "Install phase entered..."
-        echo "Checking for frontend file changes..."
-        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+        echo "Install phase entered...";
+        echo "Checking for frontend file changes...";
+        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"frontend/"* ]]; then 
           echo "No frontend changes, skipping build."; 
           exit 0;
