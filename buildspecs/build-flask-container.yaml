@@ -11,9 +11,9 @@ env:
 phases:
   install:
     commands:
-      - echo "Install phase entered...";
-      - echo "Checking for backend file changes...";
       - |
+        echo "Install phase entered...";
+        echo "Checking for backend file changes...";
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"service/"* ]]; then 
           echo "No backend changes, skipping build."; 
@@ -23,8 +23,8 @@ phases:
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
   pre_build:
     commands:
-      - echo "Pre-build phase entered..."
       - |
+        echo "Pre-build phase entered..."
         if [[ $SKIP_BUILD == 1 ]]; then
           exit 0;
         fi;
@@ -32,18 +32,26 @@ phases:
         cd ./service/instance
   build:
     commands:
-      - echo "Build phase entered..."
-      - printf "DB_HOST='$DB_HOST'\n" >> config.py
-      - printf "DB_USER='$DB_USERNAME'\n" >> config.py
-      - printf "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
-      - printf "DB_PORT='$DB_PORT'\n" >> config.py 
-      - printf "DB_NAME='$DB_NAME'\n" >> config.py
-      - cd ..
-      - docker build -t $AWS_ECR_REPOSITORY_URI .
+      - |
+        echo "Build phase entered..."
+        if [[ $SKIP_BUILD == 1 ]]; then
+          exit 0;
+        fi;
+        printf "DB_HOST='$DB_HOST'\n" >> config.py
+        printf "DB_USER='$DB_USERNAME'\n" >> config.py
+        printf "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
+        printf "DB_PORT='$DB_PORT'\n" >> config.py 
+        printf "DB_NAME='$DB_NAME'\n" >> config.py
+        cd ..
+        docker build -t $AWS_ECR_REPOSITORY_URI .
   post_build:
     commands:
-      - echo "Post-build phase entered..."
-      - docker push $AWS_ECR_REPOSITORY_URI
+      - |
+        echo "Post-build phase entered..."
+        if [[ $SKIP_BUILD == 1 ]]; then
+          exit 0;
+        fi;
+        docker push $AWS_ECR_REPOSITORY_URI
 artifacts:
   files:
     - '**/*'
