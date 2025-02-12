@@ -39,18 +39,18 @@ class Connection:
                     password=self.config['DB_PASSWORD']
                 )
 
-            print(conn)
             return conn
         except psycopg2.DatabaseError as e:
-            print(f"Database connection error: {e}")
+            current_app.logger.error(f"Database connection error: {e}")
             return None, None
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            current_app.logger.error(f"An unexpected error occurred: {e}")
             return None, None
 
     def fetch_error_list(self):
         conn = self._get_db_connection()
         if conn is None:
+            current_app.logger.error('Failed to connect to the database.')
             return None
 
         try:
@@ -79,9 +79,9 @@ class Connection:
             conn.close()
             return error_list
         except psycopg2.OperationalError as e:
-            print(f"Operational error: {e}")
+            current_app.logger.error(f"Operational error: {e}")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            current_app.logger.error(f"An unexpected error occurred: {e}")
         finally:
             if conn:
                 conn.close()

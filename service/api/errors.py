@@ -17,7 +17,7 @@ def count_errors():
                 'count': str(error_list.shape[0])
             }
     except Exception as e:
-        error = e
+        current_app.logger.error(f"An unexpected error occurred: {e}")
         pass
 
     return {
@@ -66,7 +66,7 @@ def get_errors():
         if error is None:
             return filtered_errors[['exam_id', 'marked_tgt_seg', 'simplified_src_text', 'name', 'severity', 'ata_points', 'ata_score', 'src_lang']].to_json()
     except Exception as e:
-        error = e
+        current_app.logger.error(f"An unexpected error occurred: {e}")
         pass
     
     return {

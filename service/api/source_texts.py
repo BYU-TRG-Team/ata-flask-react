@@ -17,7 +17,7 @@ def count_errors():
                 'count': str(len(error_list['src_text'].unique()))
             }
     except Exception as e:
-        error = e
+        current_app.logger.error(f"An unexpected error occurred: {e}")
         pass
 
     return {
@@ -34,7 +34,7 @@ def get_errors():
         if error is None:
             return error_list['src_text'].to_json()
     except Exception as e:
-        error = e
+        current_app.logger.error(f"An unexpected error occurred: {e}")
         pass
 
     return {

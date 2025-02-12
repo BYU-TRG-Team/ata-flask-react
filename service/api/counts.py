@@ -20,7 +20,7 @@ def get_counts():
                 'years': f'{error_list["year"].min()} - {error_list["year"].max()}'
             }
     except Exception as e:
-        error = e
+        current_app.logger.error(f"An unexpected error occurred: {e}")
         pass
 
     return {

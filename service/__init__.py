@@ -49,6 +49,7 @@ def create_app(test_config=None):
         boto3.client('sts').get_caller_identity()
         aws_connected = True
     except botocore.exceptions.NoCredentialsError:
+        print("No AWS credentials found.")
         aws_connected = False
 
     if aws_connected:
@@ -91,5 +92,7 @@ def create_app(test_config=None):
         cw_handler.setLevel(logging.INFO)
         cw_handler.setFormatter(formatter)
         app.logger.addHandler(cw_handler)
+    else:
+        app.logger.addHandler()
 
     return app
