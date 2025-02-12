@@ -9,52 +9,32 @@ env:
     DB_NAME:      ata-db-name:ata-db-name
 
 phases:
-  install:
+  build:
     commands:
       - |
-        echo "Install phase entered...";
+        echo "Build phase entered..."
         echo "Checking for backend file changes...";
-        SKIP_BUILD=0
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"service/"* ]]; then 
           echo "No backend changes, skipping build."; 
           export SKIP_BUILD=1
           exit 0; 
         fi
+
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
-    exported-variables:
-      - SKIP_BUILD
-  pre_build:
-    commands:
-      - |
-        echo "Pre-build phase entered..."
-        echo $SKIP_BUILD
-        if [[ $SKIP_BUILD == 1 ]]; then
-          exit 0;
-        fi;
+
         mkdir ./service/instance
         cd ./service/instance
-  build:
-    commands:
-      - |
-        echo "Build phase entered..."
-        if [[ $SKIP_BUILD == 1 ]]; then
-          exit 0;
-        fi;
+
         printf "DB_HOST='$DB_HOST'\n" >> config.py
         printf "DB_USER='$DB_USERNAME'\n" >> config.py
         printf "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
         printf "DB_PORT='$DB_PORT'\n" >> config.py 
         printf "DB_NAME='$DB_NAME'\n" >> config.py
+
         cd ..
+
         docker build -t $AWS_ECR_REPOSITORY_URI .
-  post_build:
-    commands:
-      - |
-        echo "Post-build phase entered..."
-        if [[ $SKIP_BUILD == 1 ]]; then
-          exit 0;
-        fi;
         docker push $AWS_ECR_REPOSITORY_URI
 artifacts:
   files:
