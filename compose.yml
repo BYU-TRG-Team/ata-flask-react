@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   flask:
     image: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest

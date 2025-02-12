@@ -2,7 +2,7 @@
 
 from json import dumps
 from flask import (
-    Blueprint
+    Blueprint, current_app
 )
 
 from ..db import ata_connection
