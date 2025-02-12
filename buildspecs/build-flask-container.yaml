@@ -1,8 +1,6 @@
 version: 0.2
 
 env:
-  variables:
-    SKIP_BUILD:   0
   secrets-manager:
     DB_HOST:      ATA_DB_CREDENTIALS:host
     DB_USERNAME:  ATA_DB_CREDENTIALS:username
@@ -16,6 +14,7 @@ phases:
       - |
         echo "Install phase entered...";
         echo "Checking for backend file changes...";
+        SKIP_BUILD=0
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"service/"* ]]; then 
           echo "No backend changes, skipping build."; 
@@ -23,6 +22,8 @@ phases:
           exit 0; 
         fi
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+    exported-variables:
+      - SKIP_BUILD
   pre_build:
     commands:
       - |

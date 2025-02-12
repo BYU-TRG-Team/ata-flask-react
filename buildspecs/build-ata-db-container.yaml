@@ -1,15 +1,12 @@
 version: 0.2
 
-env:
-  variables:
-    SKIP_BUILD:   0
-
 phases:
   install:
     commands:
       - |
         echo "Install phase entered...";
         echo "Checking if compose.yml has changed...";
+        SKIP_BUILD=0
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"compose.yml"* ]]; then 
           echo "No compose changes, skipping build."; 
@@ -17,6 +14,8 @@ phases:
           exit 1; 
         fi
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+    exported-variables:
+      - SKIP_BUILD
   pre_build:
     commands:
       - |

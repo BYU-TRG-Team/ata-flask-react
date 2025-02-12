@@ -1,22 +1,21 @@
 version: 0.2
 
-env:
-  variables:
-    SKIP_BUILD:   0
-
 phases:
   install:
     commands:
       - |
         echo "Install phase entered...";
+        SKIP_BUILD=0
         echo "Checking for frontend file changes...";
         CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD);
         if [[ "$CHANGED_FILES" != *"frontend/"* ]]; then 
           echo "No frontend changes, skipping build.";
-          export SKIP_BUILD=1
+          SKIP_BUILD=1
           exit 1;
         fi
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
+    exported-variables:
+      - SKIP_BUILD
   pre_build:
     commands:
       - |
