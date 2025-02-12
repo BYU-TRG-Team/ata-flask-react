@@ -15,17 +15,17 @@ phases:
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
   pre_build:
     commands:
-      - if [[ $SKIP_BUILD == 1]]; then exit 0; fi;
+      - if [[ $SKIP_BUILD == 1 ]]; then exit 0; fi;
       - echo "Pre-build phase entered..."
       - cd frontend 
   build:
     commands:
-      - if [[ $SKIP_BUILD == 1]]; then exit 0; fi;
+      - if [[ $SKIP_BUILD == 1 ]]; then exit 0; fi;
       - echo "Build phase entered..."
       - docker build -t $AWS_ECR_REPOSITORY_URI .
   post_build:
     commands:
-      - if [[ $SKIP_BUILD == 1]]; then exit 0; fi;
+      - if [[ $SKIP_BUILD == 1 ]]; then exit 0; fi;
       - echo "Post-build phase entered..."
       - docker push $AWS_ECR_REPOSITORY_URI
 artifacts:
