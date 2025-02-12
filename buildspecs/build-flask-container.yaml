@@ -1,12 +1,14 @@
 version: 0.2
 
 env:
+  variables:
+    SKIP_BUILD:   0
   secrets-manager:
-    DB_HOST:     ATA_DB_CREDENTIALS:host
-    DB_USERNAME: ATA_DB_CREDENTIALS:username
-    DB_PASSWORD: ATA_DB_CREDENTIALS:password
-    DB_PORT:     ATA_DB_CREDENTIALS:port
-    DB_NAME:     ata-db-name:ata-db-name
+    DB_HOST:      ATA_DB_CREDENTIALS:host
+    DB_USERNAME:  ATA_DB_CREDENTIALS:username
+    DB_PASSWORD:  ATA_DB_CREDENTIALS:password
+    DB_PORT:      ATA_DB_CREDENTIALS:port
+    DB_NAME:      ata-db-name:ata-db-name
 
 phases:
   install:
