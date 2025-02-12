@@ -1,0 +1,100 @@
+# ATA Flask Service
+
+This is a Flask-based service for the ATA application. It provides various APIs to interact with the backend database and perform operations related to exams, errors, filters, and counts.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Service](#running-the-service)
+- [API Endpoints](#api-endpoints)
+- [Logging](#logging)
+- [License](#license)
+
+## Installation
+:
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/BYU-TRG-Team/ata_flask_react.git
+    cd ata_flask_react/service
+    ```
+
+2. Create a virtual environment and activate it:
+    ```sh
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+3. Install the required dependencies:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+## Configuration
+
+1. Create a `config.py` file in the `instance` folder with the following content:
+    ```python
+    DB_HOST = 'your-db-host'
+    DB_USERNAME = 'your-db-username'
+    DB_PASSWORD = 'your-db-password'
+    DB_PORT = 'your-db-port'
+    DB_NAME = 'your-db-name'
+    ```
+
+2. Ensure that the `instance` folder is created in the `service` directory.
+
+## Running the Service
+
+1. Set the `FLASK_APP` environment variable:
+    ```sh
+    export FLASK_APP=service
+    ```
+
+2. Run the Flask application:
+    ```sh
+    flask run
+    ```
+
+## API Endpoints
+
+### Counts API
+
+- **GET /api/counts**
+  - Retrieves counts of exams, errors, source texts, and years.
+
+### Errors API
+
+- **POST /api/errors/count**
+  - Counts the number of errors.
+
+- **POST /api/errors**
+  - Retrieves errors based on filters.
+
+### Filters API
+
+- **POST /api/filters**
+  - Retrieves various filter options.
+
+### Source Texts API
+
+- **POST /api/source_texts/count**
+  - Counts the number of unique source texts.
+
+- **POST /api/source_texts**
+  - Retrieves source texts.
+
+### Exams API
+
+- **POST /api/exams/count**
+  - Counts the number of unique exams.
+
+- **POST /api/exams**
+  - Retrieves exams.
+
+## Logging
+
+The service uses both file-based logging and AWS CloudWatch logging. Logs are stored in the `logs/ata-db.log` file and sent to CloudWatch if AWS credentials are available.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.

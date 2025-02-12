@@ -1,27 +1,64 @@
-# React + TypeScript + Vite
+# ATA React Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend application for the ATA project, built using React and Vite.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the App](#running-the-app)
+- [Building the App](#building-the-app)
+- [Docker](#docker)
+- [Nginx Configuration](#nginx-configuration)
+- [License](#license)
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/BYU-TRG-Team/ata_flask_react.git
+    cd ata_flask_react/frontend
+    ```
 
-- Configure the top-level `parserOptions` property like this:
+2. Install the required dependencies:
+    ```sh
+    npm install
+    ```
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+## Running the App
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. Start the development server:
+    ```sh
+    npm run dev
+    ```
+
+2. Open your browser and navigate to `http://localhost:3000`.
+
+## Building the App
+
+1. Build the production-ready app:
+    ```sh
+    npm run build
+    ```
+
+2. The built files will be located in the `dist` directory.
+
+## Docker
+
+1. Build the Docker image:
+    ```sh
+    docker build -t ata-frontend .
+    ```
+
+2. Run the Docker container:
+    ```sh
+    docker run -p 443:443 ata-frontend
+    ```
+
+## Nginx Configuration
+
+The app uses Nginx as a web server with SSL enabled. The Nginx configuration is defined in the `nginx-ssl.conf` file. A self-signed SSL certificate is generated during the Docker build process.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
