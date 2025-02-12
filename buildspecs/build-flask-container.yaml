@@ -27,6 +27,7 @@ phases:
     commands:
       - |
         echo "Pre-build phase entered..."
+        echo $SKIP_BUILD
         if [[ $SKIP_BUILD == 1 ]]; then
           exit 0;
         fi;
