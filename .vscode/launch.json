@@ -5,11 +5,34 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: Flask",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "service/__init__.py",
+                "FLASK_DEBUG": "1"
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload",
+                "--port=5000"
+            ],
+            "jinja": true,
+            "autoStartBrowser": false,
+            "console": "integratedTerminal"
+        },
+        {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Launch Chrome with Vite",
             "url": "http://localhost:5173",
-            "webRoot": "${workspaceFolder}"
-        }
+            "webRoot": "${workspaceFolder}/frontend/src",
+            "sourceMaps": true,
+            "skipFiles": [
+                "**/node_modules/**/*"
+            ]
+        },
     ]
 }

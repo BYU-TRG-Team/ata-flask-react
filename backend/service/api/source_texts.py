@@ -2,41 +2,46 @@ from flask import (
     Blueprint, current_app, request, session
 )
 
-from .db import ata_connection
+from ..db import ata_connection
 
-bp = Blueprint('exams_api', __name__, url_prefix='/api')
+bp = Blueprint('source_texts_api', __name__, url_prefix='/api')
 
-@bp.route('/exams/count', methods=('POST',))
+@bp.route('/source_texts/count', methods=('POST',))
 def count_errors():
     error = None
 
     try:
+        if ata_connection is None:
+            return {
+                'error': 'Could not connect to the database.'
+            }
+
         error_list = ata_connection.fetch_error_list()
         if error is None:
             return {
-                'count': str(len(error_list['exam_id'].unique()))
+                'count': str(len(error_list['src_text'].unique()))
             }
     except Exception as e:
         current_app.logger.error(f"An unexpected error occurred: {e}")
         pass
 
     return {
-        'error': error or "Exams could not be counted."
+        'error': error or "Source texts could not be counted."
     }
 
 
-@bp.route('/exams', methods=('POST',))
+@bp.route('/source_texts', methods=('POST',))
 def get_errors():
     error = None
 
     try:
         error_list = ata_connection.fetch_error_list()
         if error is None:
-            return error_list['exam_id'].to_json()
+            return error_list['src_text'].to_json()
     except Exception as e:
         current_app.logger.error(f"An unexpected error occurred: {e}")
         pass
 
     return {
-        'error': error or "Errors could not be retrieved.",
+        'error': error or "Source texts could not be retrieved.",
     }

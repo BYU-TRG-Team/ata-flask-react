@@ -67,11 +67,16 @@ export default function Errors() {
         const nameCountBySrcLang = Object.keys(data?.['name'] ?? {}).reduce((prev, key, i) => {
             const name = data['name'][key]
             const lang = data['src_lang'][i]
-            if (prev[lang]['y']) prev[lang]['y']++
-            else {
-                prev[lang]['x'] = name
-                prev[lang]['y'] = 1
+
+            if (prev[lang]?.['y']) {
+                prev[lang]['y']++
+            } else {
+                prev[lang] = {
+                    x: name,
+                    y: 1
+                }
             }
+            
             return prev
         }, {})
 
@@ -252,7 +257,7 @@ export default function Errors() {
     return (
         <>
             <Container sx={{ pt: 4,  display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                <InfoCard title="Total Number of Errors" body={counts?.errors.toString() ?? '...'} />
+                <InfoCard title="Total Number of Errors" body={counts?.errors?.toString() ?? '...'} />
                 <InfoCard title="Total Number of Filtered Errors" body={dataRows.length.toString()} />
                 { data && 
                 <DataGrid

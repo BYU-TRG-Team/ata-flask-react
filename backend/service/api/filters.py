@@ -14,6 +14,11 @@ def get_counts():
     error = None
 
     try:
+        if ata_connection is None:
+            return {
+                'error': 'Could not connect to the database.'
+            }
+
         error_list = ata_connection.fetch_error_list()
         if error is None:
             ret = {
