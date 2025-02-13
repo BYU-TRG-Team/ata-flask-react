@@ -1,16 +1,15 @@
 services:
   wsgi:
     image: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-api:latest
-    build: ./backend
+    # build: ./backend
     ports:
       - '8000:8000'
-      - '5432:5432'
     networks:
       - ata-network
 
   nginx:
     image: 767397767501.dkr.ecr.us-east-1.amazonaws.com/ata-db-frontend:latest
-    build: ./frontend
+    # build: ./frontend
     ports:
       - '443:443'
     networks:
