@@ -1,0 +1,4 @@
+[submodule "backend/service/ata_db_connect"]
+	path = backend/service/ata_db_connect
+	url = https://github.com/BYU-TRG-Team/ata_db_connect.git
+	branch = main
