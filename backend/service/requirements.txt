@@ -5,3 +5,4 @@ pandas>=2.2.2
 psycopg2_binary>=2.9.6
 Werkzeug>=2.3.6
 boto3>=1.35.92
+sqlalchemy>=1.4.25
