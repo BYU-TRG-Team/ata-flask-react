@@ -1,0 +1,3 @@
+[submodule "ata_db_connect"]
+	path = ata_db_connect
+	url = git@github.com:BYU-TRG-Team/ata_db_connect.git
