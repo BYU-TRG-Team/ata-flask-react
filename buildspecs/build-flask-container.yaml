@@ -26,11 +26,11 @@ phases:
         mkdir ./backend/instance
         cd ./backend/instance
 
-        printf "DB_HOST = $DB_HOST\n" >> config.ini
-        printf "DB_USER = $DB_USERNAME\n" >> config.ini
-        printf "DB_PASSWORD = $DB_PASSWORD\n" >> config.ini
-        printf "DB_PORT = $DB_PORT\n" >> config.ini 
-        printf "DB_NAME = $DB_NAME\n" >> config.ini
+        printf "DB_HOST='$DB_HOST'\n" >> config.py
+        printf "DB_USER='$DB_USERNAME'\n" >> config.py
+        printf "DB_PASSWORD='$DB_PASSWORD'\n" >> config.py
+        printf "DB_PORT='$DB_PORT'\n" >> config.py 
+        printf "DB_NAME='$DB_NAME'\n" >> config.py
 
         cd ..
 
