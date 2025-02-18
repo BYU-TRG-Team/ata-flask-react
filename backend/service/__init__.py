@@ -3,7 +3,6 @@ import sys
 import boto3
 import botocore
 import json
-import configparser
 
 import logging
 from logging.handlers import RotatingFileHandler
@@ -14,20 +13,22 @@ from flask_jwt_extended import JWTManager
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True, static_folder='frontend/dist')
-    app.config_path = os.path.join(app.instance_path, 'config.ini')
+    app.config.from_pyfile(os.path.join(app.instance_path, 'config.py'))
 
+    print("app.config: ", app.config)
+    print("app.instance_path: ", app.instance_path)
     jwt = JWTManager(app)
 
     with app.app_context():
         try:
             from .db import ata_connection 
+            from .api import counts, errors, filters
+            app.register_blueprint(counts.bp)
+            app.register_blueprint(errors.bp)
+            app.register_blueprint(filters.bp)
         except:
-            raise ConnectionError("Error: Could not connect to the database.")
+            print("Error: Could not connect to the database.")
     
-    from .api import counts, errors, filters
-    app.register_blueprint(counts.bp)
-    app.register_blueprint(errors.bp)
-    app.register_blueprint(filters.bp)
     # from . import server
     # app.register_blueprint(server.bp)
 
@@ -48,13 +49,22 @@ def create_app(test_config=None):
     app.logger.setLevel(logging.INFO)
     app.logger.addHandler(handler)
 
-    if (test_config is not True):
+    # check if we can connect to AWS
+    try:
+        isLocal = app.config.LOCAL 
+    except: 
+        try:
+            isLocal = app.config['LOCAL']
+        except:
+            isLocal = 'False'
+
+    if (isLocal == 'False'):
         try:
             boto3.client('sts').get_caller_identity()
             aws_connected = True
         except botocore.exceptions.NoCredentialsError:
+            print("No AWS credentials found.")
             aws_connected = False
-            raise("No AWS credentials found.")
 
         if aws_connected:
             # create a CloudWatch Logs client.
